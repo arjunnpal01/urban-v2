@@ -14,14 +14,12 @@ import {
   REGISTER,
 } from 'redux-persist';
 
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-
+import storage from './storage'; // ✅ use SSR-safe storage
 
 const rootReducer = combineReducers({
   cart: cartReducer,
   auth: authReducer,
 });
-
 
 const persistConfig = {
   key: 'root',
@@ -29,9 +27,7 @@ const persistConfig = {
   whitelist: ['cart', 'auth'], 
 };
 
-
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -42,6 +38,5 @@ export const store = configureStore({
       },
     }),
 });
-
 
 export const persistor = persistStore(store);

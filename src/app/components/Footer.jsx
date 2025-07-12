@@ -18,7 +18,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="hidden md:block bg-purple-50 text-gray-800 border-t border-gray-200 pt-6 mt-6 pb-6">
+    <footer className="hidden md:block bg-[#f5faff] text-[#2b3a67] border-t border-gray-200 pt-6 mt-6 pb-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="overflow-x-auto md:overflow-visible">
           <div className="flex md:grid md:grid-cols-4 gap-10 min-w-[700px] md:min-w-0">

@@ -2,9 +2,9 @@
 
 export default function PainterSidebar({ onScrollTo }) {
   const items = [
-    { label: "Wall", key: "Wall" },
-    { label: "Ceiling", key: "Ceiling" },
-    { label: "Exterior", key: "Exterior" },
+    { label: "Unfurnished Full Home", key: "Unfurnished Full Home" },
+    { label: "furnished Full Home", key: "furnished Full Home" },
+    { label: "Kitchen, Bathroom & Balcony", key: "Kitchen, Bathroom & Balcony" },
     { label: "Wood", key: "Wood" },
     { label: "Metal", key: "Metal" },
   ];

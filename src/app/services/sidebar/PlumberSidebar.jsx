@@ -2,11 +2,11 @@
 
 const PlumberSidebar = () => {
   const categories = [
-    { label: "Bathroom Fittings", key: "BathroomFittings" },
-    { label: "Geyser Services", key: "GeyserServices" },
-    { label: "Leak Repairs", key: "LeakRepairs" },
-    { label: "Installations", key: "Installations" },
-    { label: "Tank & Sink Services", key: "TankSinkServices" },
+    { label: "Bathroom Fittings", key: "Bathroom Fittings" },
+     { label: "Tap & Mixer", key: "Tap & Mixer" },
+    { label: "Toilet Services", key: "Toilet" }, 
+    { label: "Water Tank & Sink ", key: "Water Tank & Sink Services" },
+   
   ];
 
   return (

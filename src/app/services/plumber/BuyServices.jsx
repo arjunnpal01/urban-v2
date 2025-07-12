@@ -47,9 +47,9 @@ export default function BuyService({ services }) {
                   onClick={() =>
                     dispatch(addToCart({ ...service, quantity: 1, category }))
                   }
-                  className="bg-purple-600 text-white px-4 py-1 rounded text-sm"
+                  className="bg-purple-600 text-white px-4 py-1 rounded text-sm "
                 >
-                  Add
+                  Add 
                 </button>
               ) : (
                 <div className="flex items-center space-x-2">

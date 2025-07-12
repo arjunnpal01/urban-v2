@@ -10,66 +10,73 @@ export default function PainterServices() {
       title: "Rooms/walls painting consultation",
       rating: "★ 4.79 (4K)",
       price: "₹49",
-      image: "/images/pr1.jpg", // use actual image filename
+      image: "/images/painter-home.jpg",
     },
     {
-      title: "Pest control (includes utensil removal)",
+      title: "Textured Paint Designs",
       rating: "★ 4.79 (106K)",
       price: "₹1,098",
-      image: "/images/pr2.jpg",
+      image: "/images/Textured-Paint-Designs.webp",
     },
     {
-      title: "Apartment pest control",
+      title: "Interior Wall Painting",
       rating: "★ 4.80 (35K)",
       price: "₹1,498",
-      image: "/images/pl3.jpg",
+      image: "/images/wall-painting.jpg",
     },
     {
-      title: "Foam-jet AC service",
+      title: "Terrace Waterproofing Paint",
       rating: "★ 4.78 (1.5M)",
       price: "₹599",
-      image: "/images/pl2.jpg",
+      image: "/images/painting.jpg",
     },
     {
-      title: "Apartment termite control",
+      title: "Home Painting Consultation",
       rating: "★ 4.83 (15K)",
       price: "₹3,999",
-      image: "/images/en5.jpg",
+      image: "/images/painter-house.webp",
     },
   ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold">Painter Services</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-semibold whitespace-nowrap">
+          Painter Services
+        </h2>
         <Link
-          href="/services/painter"
-          className="text-sm px-4 py-3 rounded text-blue-600 border border-gray-200 hover:underline"
+          href="/services?type=painter"
+          className="text-sm px-4 py-3 rounded text-blue-600 border border-gray-200 hover:underline whitespace-nowrap"
         >
           See all
         </Link>
       </div>
 
-      {/* Scrollable Card Row */}
-      <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
+      {/* Scrollable Cards */}
+      <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-2 scroll-smooth">
         {items.map((item, index) => (
-          <div key={index} className="w-[240px] flex-shrink-0">
-            <div className="border border-gray-200 rounded-xl overflow-hidden bg-white h-[320px] flex flex-col">
+          <div
+            key={index}
+            className="w-[220px] md:w-[230px] lg:w-[270px] flex-shrink-0 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer"
+          >
+            <div className="border border-gray-200 rounded-xl overflow-hidden bg-white h-[360px] flex flex-col">
               {/* Image */}
-              <div className="relative w-full h-48">
+              <div className="relative w-full h-52">
                 <Image
                   src={item.image}
                   alt={item.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 270px"
                   className="object-cover"
+                  loading="lazy"
                 />
               </div>
 
               {/* Card Content */}
-              <CardContent className="p-4 pb-8 flex-1 flex flex-col justify-between">
+              <CardContent className="p-4 pb-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-sm font-medium">{item.title}</h3>
+                  <h3 className="text-sm font-medium truncate">{item.title}</h3>
                   <p className="text-xs text-gray-500">{item.rating}</p>
                 </div>
                 <p className="text-sm font-semibold">{item.price}</p>

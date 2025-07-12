@@ -71,7 +71,7 @@ export default function LocationModal({ onClose }) {
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-end md:items-center justify-center">
       <div className="w-full md:w-[400px] max-h-[90vh] bg-white rounded-t-2xl md:rounded-lg shadow-lg flex flex-col overflow-hidden animate-slideUp">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center justify-between p-4 border-b-gray-500">
           <h2 className="text-base font-semibold text-gray-800">
             Select your location
           </h2>
@@ -90,7 +90,7 @@ export default function LocationModal({ onClose }) {
             placeholder="Search for your city"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full border px-4 py-2 rounded text-sm mb-4"
+            className="w-full border border-gray-300 px-4 py-2 rounded text-sm mb-4"
           />
 
           {searchTerm && suggestions.length > 0 && (

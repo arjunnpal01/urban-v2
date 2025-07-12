@@ -8,10 +8,10 @@ const ElectricianSidebar = () => {
     { label: "Fan", key: "Fan" },
     { label: "Wall/Ceiling Light", key: "WallCeilingLight" },
     { label: "Wiring", key: "Wiring" },
+    { label: "Appliance", key: "Appliance" },
     { label: "Doorbell", key: "Doorbell" },
     { label: "MCB & Submeter", key: "MCBSubmeter" },
     { label: "Inverter & Stabiliser", key: "InverterStabiliser" },
-    { label: "Appliance", key: "Appliance" },
   ];
 
   return (

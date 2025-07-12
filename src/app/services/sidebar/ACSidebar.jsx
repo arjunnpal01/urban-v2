@@ -2,11 +2,16 @@
 
 import React from "react";
 
-const ACSidebar = () => {
+const ACSidebar = ({ onScrollTo }) => {
   const items = [
     { label: "Service", key: "Service" },
-    { label: "Repair & Gas Refill", key: "Repair" },
-    { label: "Installation/Uninstallation", key: "Installation" },
+    { label: "Repair & Gas Refill", key: "Repair & Gas Refill" },
+    { label: "Installation/Uninstallation", key: "Installation/Uninstallation" },
+    { label: "Washing Machine", key: "Washing Machine" },
+    { label: "Television", key: "Television" },
+    { label: "Geyser", key: "Geyser" },
+    { label: "Air Cooler", key: "Air Cooler" },
+
   ];
 
   return (
@@ -14,13 +19,13 @@ const ACSidebar = () => {
       <h3 className="text-lg font-bold mb-2">AC Services</h3>
       <nav className="space-y-2">
         {items.map((item, idx) => (
-          <a
+          <button
             key={idx}
-            href={`#${item.key}`}
+            onClick={() => onScrollTo(item.key)}
             className="block text-left w-full text-gray-700 hover:text-black hover:underline"
           >
             {item.label}
-          </a>
+          </button>
         ))}
       </nav>
     </aside>

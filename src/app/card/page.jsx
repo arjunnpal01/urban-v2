@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const Mostservice = () => {
   const scrollRef = useRef(null);
 
-  // Scroll left/right buttons
+  // Scroll by buttons
   const scrollLeft = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({ left: -320, behavior: "smooth" });
@@ -19,19 +19,23 @@ const Mostservice = () => {
     }
   };
 
-  // Mouse wheel → horizontal scroll
+  // Fix: allow vertical scroll when horizontal edges reached
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
 
     const onWheel = (e) => {
-      if (e.deltaY === 0) return;
-      e.preventDefault();
-      el.scrollBy({ left: e.deltaY, behavior: "smooth" });
+      const canScrollLeft = el.scrollLeft > 0;
+      const canScrollRight =
+        el.scrollLeft < el.scrollWidth - el.clientWidth;
+
+      if (e.deltaY !== 0 && (canScrollLeft || canScrollRight)) {
+        e.preventDefault();
+        el.scrollBy({ left: e.deltaY, behavior: "smooth" });
+      }
     };
 
     el.addEventListener("wheel", onWheel, { passive: false });
-
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
@@ -46,7 +50,7 @@ const Mostservice = () => {
 
   return (
     <section
-      className="relative px-2 sm:px-4 py-8 max-w-7xl mx-auto"
+      className="relative px-2 sm:px-4 py-8 max-w-7xl mx-auto w-full overflow-x-hidden"
       aria-labelledby="most-booked-services"
     >
       <h2
@@ -60,7 +64,7 @@ const Mostservice = () => {
       <button
         aria-label="Scroll left"
         onClick={scrollLeft}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white shadow p-2 rounded-full hidden md:flex hover:bg-gray-100"
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full hidden md:flex hover:bg-gray-100"
         type="button"
       >
         <ChevronLeft className="w-5 h-5 text-gray-700" />
@@ -69,24 +73,24 @@ const Mostservice = () => {
       <button
         aria-label="Scroll right"
         onClick={scrollRight}
-        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white shadow p-2 rounded-full hidden md:flex hover:bg-gray-100"
+        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full hidden md:flex hover:bg-gray-100"
         type="button"
       >
         <ChevronRight className="w-5 h-5 text-gray-700" />
       </button>
 
-      {/* Scroll container */}
+      {/* Scrollable Card Container */}
       <div className="overflow-hidden">
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth"
+          className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-1"
           tabIndex={0}
           aria-label="Service cards"
         >
           {services.map((item, index) => (
             <article
               key={index}
-              className="w-64 sm:w-72 md:w-80 flex-shrink-0 bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
+              className="w-64 sm:w-72 md:w-80 flex-shrink-0 bg-white rounded-xl overflow-hidden border border-gray-100"
             >
               <img
                 src={item.img}
@@ -98,7 +102,7 @@ const Mostservice = () => {
                 <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
                 <p className="text-gray-500 text-sm mb-2">
                   Professional and trusted
-               </p>
+                </p>
                 <button
                   className="mt-2 px-4 py-1 bg-black text-white rounded text-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black"
                   type="button"

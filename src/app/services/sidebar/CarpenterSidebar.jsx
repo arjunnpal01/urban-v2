@@ -2,12 +2,10 @@
 
 export default function CarpenterSidebar({ onScrollTo }) {
   const items = [
-    { label: "Clothes Hanger", key: "ClothesHanger" },
-    { label: "Bed", key: "Bed" },
+     { label: "Door", key: "Door" },
     { label: "Cupboard & Drawer", key: "CupboardDrawer" },
-    { label: "Door", key: "Door" },
     { label: "Furniture Repair", key: "FurnitureRepair" },
-    { label: "Window & Curtain", key: "WindowCurtain" },
+     { label: "Bed & Sofa", key: "Bed & Sofa" },
   ];
 
   return (

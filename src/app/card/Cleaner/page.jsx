@@ -2,46 +2,78 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
-const services = [
-  { title: "AC Service & Repair", image: "/images/ac.png" },
-  { title: "Washing Machine", image: "/images/washing_machine.png" },
-  { title: "Television", image: "/images/tv.png" },
-  { title: "Laptop", image: "/images/laptop.png" },
-  { title: "Air Cooler", image: "/images/air_cooler.png" },
-];
+import { CardContent } from "@/components/ui/card";
 
 export default function CleaningServices() {
+  const items = [
+    {
+      title: "Home Deep Cleaning",
+      image: "/images/homecleaning.jpg",
+    },
+    {
+      title: "Pest Control (includes utensil removal)",
+      image: "/images/cleaner3.jpg",
+    },
+    {
+      title: "Bathroom Deep Cleaning",
+      image: "/images/bathroomcleaning.jpeg",
+    },
+    {
+      title: "Foam-jet Sofa & AC Cleaning",
+      image: "/images/sofa.jpg",
+    },
+    {
+      title: "Termite Control Services",
+      image: "/images/cleaning2.avif",
+    },
+  ];
+
+  const generateSlug = (title) =>
+    title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold">Cleaning  & Pest Control</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-semibold whitespace-nowrap">
+          Cleaning & Pest Control
+        </h2>
         <Link
-          href="/services/appliances"
-          className="text-sm px-4 py-3 rounded text-blue-600 border border-gray-200 hover:underline"
+          href="/services?type=cleaning"
+          className="text-sm px-4 py-3 rounded text-blue-600 border border-gray-200 hover:underline whitespace-nowrap"
         >
           See all
         </Link>
       </div>
 
-      {/* Horizontal Scroll Cards (no scrollbar shown) */}
-      <div className="flex gap-4 overflow-x-auto scroll-smooth hide-scrollbar">
-        {services.map((service, idx) => (
-          <div
-            key={idx}
-            className="w-[240px] h-[220px] bg-gray-100 rounded-2xl shadow-md p-4 flex-shrink-0 text-center hover:shadow-lg transition-shadow duration-300"
+      {/* Scrollable Cards */}
+      <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-2">
+        {items.map((item, index) => (
+          <Link
+            key={index}
+            href={`/services/cleaning?scrollTo=${generateSlug(item.title)}`}
+            className="w-[220px] md:w-[230px] lg:w-[270px] flex-shrink-0"
           >
-            <div className="relative w-full h-24 mb-2">
-              <Image
-                src={service.image}
-                alt={service.title}
-                fill
-                className="object-contain"
-              />
+            <div className="border border-gray-200 rounded-xl overflow-hidden bg-white h-[320px] flex flex-col hover:shadow-md transition">
+              {/* Image */}
+              <div className="relative w-full h-48">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 270px"
+                  className="object-cover"
+                />
+              </div>
+
+              {/* Card Content */}
+              <CardContent className="p-4 pb-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-sm font-medium truncate">{item.title}</h3>
+                </div>
+              </CardContent>
             </div>
-            <p className="text-sm font-medium text-gray-800">{service.title}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

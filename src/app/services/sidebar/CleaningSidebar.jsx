@@ -4,11 +4,13 @@ import React from 'react';
 
 export default function CleaningSidebar({ onScrollTo }) {
   const items = [
-    { label: 'Home Cleaning', key: 'HomeCleaning' },
-    { label: 'Furnishing Cleaning', key: 'FurnishingCleaning' },
-    { label: 'Full Home', key: 'FullHome' },
-    { label: 'Appliance Cleaning', key: 'ApplianceCleaning' },
-    { label: 'Special Cleaning', key: 'SpecialCleaning' },
+    { label: 'Bathroom Cleaning', key: 'Bathroom Cleaning' },
+    { label: ' Kitchen Cleaning', key: ' Kitchen Cleaning' },
+    { label: 'Full Home Cleaning', key: 'Full Home Cleaning' },
+    { label: 'Gym Cleaning', key: 'Gym Cleaning' },
+    { label: 'Office & Showroom Cleaning', key: 'Office & Showroom Cleaning' },
+     
+   
   ];
 
   return (

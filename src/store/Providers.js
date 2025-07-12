@@ -1,4 +1,4 @@
-'use client'; // 🔥 Required for any context providers used in app/layout.js
+'use client';
 
 import { store, persistor } from './store';
 import { Provider } from 'react-redux';

@@ -17,13 +17,13 @@ export default function Mservice() {
       title: "Rooms/walls painting consultation",
       rating: "★ 4.79 (4K)",
       price: "₹49",
-      image: "/images/cleaner1.jpg",
+      image: "/images/ac.jpg",
     },
     {
       title: "Pest control (includes utensil removal)",
       rating: "★ 4.79 (106K)",
       price: "₹1,098",
-      image: "/images/cr2.jpg",
+      image: "/images/en2.jpg",
     },
     {
       title: "Apartment pest control",
@@ -50,7 +50,7 @@ export default function Mservice() {
       className="max-w-7xl mx-auto px-4 py-6"
       aria-labelledby="most-booked-services"
     >
-      {/* Heading + See all */}
+      {/* Heading */}
       <div className="flex items-center justify-between mb-4">
         <h2
           id="most-booked-services"
@@ -68,25 +68,24 @@ export default function Mservice() {
 
       {/* Carousel */}
       <Carousel className="w-full">
-        <CarouselContent>
+        <CarouselContent className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar flex-nowrap">
           {items.map((item, index) => (
             <CarouselItem
               key={index}
-              className="basis-4/5 xs:basis-2/3 sm:basis-1/2 md:basis-1/3 lg:basis-1/5"
+              className="shrink-0 snap-start basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/5 max-w-[320px]"
               aria-label={item.title}
             >
-              <article className="overflow-hidden rounded-md shadow bg-white border border-gray-100 flex flex-col h-full">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  width={400}
-                  height={300}
-                  className="w-full h-52 object-cover"
-                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 40vw, 20vw"
-                  {...(index === 0
-                    ? { priority: true }
-                    : { loading: "lazy" })}
-                />
+              <article className="group overflow-hidden rounded-md shadow bg-white border border-gray-100 flex flex-col h-full">
+                <div className="relative w-full h-52 overflow-hidden">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    unoptimized
+                    className="object-cover transition-transform duration-700 ease-in-out "
+                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 40vw, 20vw"
+                  />
+                </div>
                 <CardContent className="p-3 flex flex-col flex-1">
                   <h3 className="text-sm font-medium text-gray-800 mb-1">
                     {item.title}
@@ -100,14 +99,10 @@ export default function Mservice() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious
-          className="text-gray-600"
-          aria-label="Previous services"
-        />
-        <CarouselNext
-          className="text-gray-600"
-          aria-label="Next services"
-        />
+
+        {/* Carousel Arrows */}
+        <CarouselPrevious className="text-gray-600 hidden md:flex" />
+        <CarouselNext className="text-gray-600 hidden md:flex" />
       </Carousel>
     </section>
   );

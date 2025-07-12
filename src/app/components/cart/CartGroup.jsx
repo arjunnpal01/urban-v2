@@ -3,6 +3,7 @@
 import { useDispatch } from 'react-redux';
 import { removeFromCart } from '@/store/cartSlice';
 
+
 const categoryImages = {
   electrician: '/images/electrician.png',
   plumber: '/images/plumber.png',
@@ -56,7 +57,7 @@ export default function CartItemGrouped({ category, items, onAddServices, onChec
           onClick={onCheckout}
           className="bg-purple-600 text-white px-4 py-2 rounded text-sm"
         >
-          Checkout
+           Book Service
         </button>
       </div>
     </div>

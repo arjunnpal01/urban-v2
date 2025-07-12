@@ -5,7 +5,7 @@ import AcRepairPage from "./ac/AcRepairPage";
 import PlumberPage from "./plumber/PlumberPage";
 import ElectricianPage from "./electrician/ElectricianPage";
 import CarpenterPage from "./carpenter/CarpenterPage";
-import CleaningPage from "./cleaner/CleaningPage";
+import CleaningPage from "./cleaning/CleaningPage";
 import PainterPage from "./Painter/PainterPage";
 
 

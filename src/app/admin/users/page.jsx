@@ -1,136 +1,47 @@
 "use client";
-import React, { useState } from "react";
-import { UserPlus, Users, UserCheck, UserX, Search, Plus, X } from "lucide-react";
-import AddUserModal from "./AddUserModal";
+import React, { useState, Suspense } from "react";
+import { Search, Plus, Pencil, Trash2 } from "lucide-react";
+import { stats, usersData, statusColors } from "./data/usersData";
+import { activity } from "./data/activityData";
+const AddUserModal = React.lazy(() => import("./components/AddUserModal"));
+const EditUserModal = React.lazy(() => import("./components/EditUserModal"));
 
-const stats = [
-	{
-		label: "Total Users",
-		value: 1284,
-		icon: <Users className="w-7 h-7 text-blue-500" />,
-		badge: (
-			<span className="text-green-600 text-xs font-semibold">
-				↑ 12% from last month
-			</span>
-		),
-	},
-	{
-		label: "Active Users",
-		value: 984,
-		icon: <UserCheck className="w-7 h-7 text-green-500" />,
-		badge: (
-			<span className="text-green-600 text-xs font-semibold">
-				↑ 8% from last month
-			</span>
-		),
-	},
-	{
-		label: "New Users",
-		value: 147,
-		icon: <UserPlus className="w-7 h-7 text-green-400" />,
-		badge: (
-			<span className="text-green-600 text-xs font-semibold">
-				↑ 23% from last month
-			</span>
-		),
-	},
-	{
-		label: "Pending Approvals",
-		value: 15,
-		icon: <UserX className="w-7 h-7 text-yellow-400" />,
-		badge: (
-			<span className="text-red-500 text-xs font-semibold">
-				↓ 5% from last month
-			</span>
-		),
-	},
-];
-
-const usersData = [
-	{
-		name: "Ramesh Verma",
-		email: "ramesh.verma@example.com",
-		phone: "+91 9876543210",
-		location: "Delhi",
-		status: "Active",
-		lastActive: "Today, 10:45 AM",
-		avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-	},
-	{
-		name: "Suman Singh",
-		email: "suman.singh@example.com",
-		phone: "+91 8765432109",
-		location: "Mumbai",
-		status: "Active",
-		lastActive: "Today, 9:30 AM",
-		avatar: "https://randomuser.me/api/portraits/men/33.jpg",
-	},
-	{
-		name: "Arjun Mehta",
-		email: "arjun.mehta@example.com",
-		phone: "+91 7654321098",
-		location: "Bangalore",
-		status: "Pending",
-		lastActive: "Yesterday, 4:15 PM",
-		avatar: "https://randomuser.me/api/portraits/men/34.jpg",
-	},
-	{
-		name: "Priyanka Jain",
-		email: "priyanka.jain@example.com",
-		phone: "+91 6543210987",
-		location: "Hyderabad",
-		status: "Inactive",
-		lastActive: "3 days ago",
-		avatar: "https://randomuser.me/api/portraits/women/35.jpg",
-	},
-	{
-		name: "Vikram Desai",
-		email: "vikram.desai@example.com",
-		phone: "+91 5432109876",
-		location: "Pune",
-		status: "Active",
-		lastActive: "2 days ago",
-		avatar: "https://randomuser.me/api/portraits/men/36.jpg",
-	},
-];
-
-const statusColors = {
-	Active: "bg-green-100 text-green-700",
-	Pending: "bg-yellow-100 text-yellow-700",
-	Inactive: "bg-red-100 text-red-700",
-};
-
-const activity = [
-	{
-		name: "Rajesh Kumar",
-		desc: "Updated profile information",
-		time: "30 mins ago",
-		avatar: "https://randomuser.me/api/portraits/men/37.jpg",
-	},
-	{
-		name: "Priya Sharma",
-		desc: "Submitted property request",
-		time: "2 hours ago",
-		avatar: "https://randomuser.me/api/portraits/women/38.jpg",
-	},
-	{
-		name: "Amit Patel",
-		desc: "Completed payment",
-		time: "5 hours ago",
-		avatar: "https://randomuser.me/api/portraits/men/39.jpg",
-	},
-	{
-		name: "Neha Gupta",
-		desc: "Signed up for newsletter",
-		time: "1 day ago",
-		avatar: "https://randomuser.me/api/portraits/women/40.jpg",
-	},
-];
+function ConfirmModal({ open, onClose, onConfirm, message, confirmLabel = "Confirm", confirmClass = "bg-blue-600 text-white hover:bg-blue-700" }) {
+	if (!open) return null;
+	return (
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+			<div className="bg-white rounded-xl shadow-lg w-full max-w-sm p-6 relative">
+				<div className="text-lg font-semibold mb-4">Are you sure?</div>
+				<div className="mb-6 text-gray-600">{message}</div>
+				<div className="flex justify-end gap-2">
+					<button
+						className="px-4 py-2 rounded bg-gray-100 text-gray-700 hover:bg-gray-200"
+						onClick={onClose}
+					>
+						Cancel
+					</button>
+					<button
+						className={`px-4 py-2 rounded ${confirmClass}`}
+						onClick={onConfirm}
+					>
+						{confirmLabel}
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+}
 
 export default function UsersPage() {
 	const [search, setSearch] = useState("");
 	const [users, setUsers] = useState(usersData);
 	const [showAdd, setShowAdd] = useState(false);
+	const [editUser, setEditUser] = useState(null);
+	const [editConfirmUser, setEditConfirmUser] = useState(null);
+	const [showEditConfirm, setShowEditConfirm] = useState(false);
+	const [editModalOpen, setEditModalOpen] = useState(false);
+	const [showConfirm, setShowConfirm] = useState(false);
+	const [deleteUser, setDeleteUser] = useState(null);
 
 	const filteredUsers = users.filter(
 		(u) =>
@@ -143,8 +54,22 @@ export default function UsersPage() {
 		setUsers([user, ...users]);
 	};
 
+	const handleEditUser = (updatedUser) => {
+		setUsers((prev) =>
+			prev.map((u) => (u.email === updatedUser.email ? { ...updatedUser } : u))
+		);
+		setEditModalOpen(false);
+		setEditUser(null);
+	};
+
+	const handleDeleteUser = () => {
+		setUsers((prev) => prev.filter((u) => u.email !== deleteUser.email));
+		setShowConfirm(false);
+		setDeleteUser(null);
+	};
+
 	return (
-		<div className="space-y-8 p-6">
+		<div className="space-y-8 p-6 px-8 max-w-screen-xl mx-auto">
 			{/* Stats */}
 			<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 				{stats.map((stat, i) => (
@@ -267,9 +192,26 @@ export default function UsersPage() {
 									</span>
 								</td>
 								<td className="py-2">{user.lastActive}</td>
-								<td className="py-2">
-									<button className="px-2 py-1 rounded hover:bg-gray-100">
-										<span className="text-gray-500">⋮</span>
+								<td className="py-2 flex gap-2">
+									<button
+										className="px-2 py-1 rounded hover:bg-gray-100 flex items-center gap-1"
+										onClick={() => {
+											setEditConfirmUser(user);
+											setShowEditConfirm(true);
+										}}
+										title="Edit"
+									>
+										<Pencil size={14} /> Edit
+									</button>
+									<button
+										className="px-2 py-1 rounded hover:bg-red-100 flex items-center gap-1 text-red-600"
+										onClick={() => {
+											setDeleteUser(user);
+											setShowConfirm(true);
+										}}
+										title="Delete"
+									>
+										<Trash2 size={14} /> Delete
 									</button>
 								</td>
 							</tr>
@@ -283,11 +225,43 @@ export default function UsersPage() {
 				)}
 			</div>
 			{showAdd && (
-				<AddUserModal
-					onClose={() => setShowAdd(false)}
-					onAdd={handleAddUser}
+				<Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+					<AddUserModal
+						onClose={() => setShowAdd(false)}
+						onAdd={handleAddUser}
+					/>
+				</Suspense>
+			)}
+			{editUser && editModalOpen && (
+				<EditUserModal
+					user={editUser}
+					onClose={() => {
+						setEditModalOpen(false);
+						setEditUser(null);
+					}}
+					onEdit={handleEditUser}
 				/>
 			)}
+			<ConfirmModal
+				open={showConfirm}
+				onClose={() => setShowConfirm(false)}
+				onConfirm={handleDeleteUser}
+				message={deleteUser ? `Delete user "${deleteUser.name}"? This action cannot be undone.` : ""}
+				confirmLabel="Delete"
+				confirmClass="bg-red-600 text-white hover:bg-red-700"
+			/>
+			<ConfirmModal
+				open={showEditConfirm}
+				onClose={() => setShowEditConfirm(false)}
+				onConfirm={() => {
+					setEditUser(editConfirmUser);
+					setEditModalOpen(true);
+					setShowEditConfirm(false);
+				}}
+				message={editConfirmUser ? `Edit user "${editConfirmUser.name}"?` : ""}
+				confirmLabel="Confirm"
+				confirmClass="bg-blue-600 text-white hover:bg-blue-700"
+			/>
 		</div>
 	);
 }

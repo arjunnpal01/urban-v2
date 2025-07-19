@@ -4,6 +4,7 @@ import { ArrowUpRight, ArrowDownRight, User, CheckCircle, XCircle, Clock, Eye, M
 import OrderDetails from "./OrderDetails";
 import AddOrderModal from "./AddOrderModal";
 import OrderTable from "./OrderTable";
+import EditOrderModal from "./EditOrderModal";
 
 const stats = [
   {
@@ -32,6 +33,7 @@ const stats = [
   },
 ];
 
+
 const statusColors = {
   "In Progress": "bg-blue-100 text-blue-700",
   Pending: "bg-yellow-100 text-yellow-700",
@@ -41,23 +43,38 @@ const statusColors = {
 
 export default function OrderDashboard() {
   const [orders, setOrders] = useState([
-    { id: "#UC-4829", customer: { name: "Ramesh Patel" }, service: { title: "Electrician" }, technician: { name: "Vikram S." }, date: "12 May, 3:30 PM", amount: 1200, status: "In Progress" },
-    { id: "#UC-4828", customer: { name: "Priya Sharma" }, service: { title: "Beauty" }, technician: { name: "Neha R." }, date: "12 May, 2:00 PM", amount: 850, status: "Completed" },
-    { id: "#UC-4827", customer: { name: "Amit Joshi" }, service: { title: "Plumbing" }, technician: { name: "Rajesh M." }, date: "12 May, 1:30 PM", amount: 1500, status: "Pending" },
-    { id: "#UC-4826", customer: { name: "Suresh Kumar" }, service: { title: "Deep Cleaning" }, technician: { name: "Pradeep K." }, date: "12 May, 11:30 AM", amount: 2400, status: "Completed" },
-    { id: "#UC-4825", customer: { name: "Ananya Gupta" }, service: { title: "Pest Control" }, technician: { name: "Mohan S." }, date: "12 May, 10:45 AM", amount: 1800, status: "Cancelled" },
+    { id: "#UC-4829", customer: { name: "Ramesh Patel" }, service: { title: "Electrician" }, provider: { name: "Vikram S." }, date: "12 May, 3:30 PM", amount: 1200, status: "In Progress" },
+    { id: "#UC-4828", customer: { name: "Priya Sharma" }, service: { title: "Beauty" }, provider: { name: "Neha R." }, date: "12 May, 2:00 PM", amount: 850, status: "Completed" },
+    { id: "#UC-4827", customer: { name: "Amit Joshi" }, service: { title: "Plumbing" }, provider: { name: "Rajesh M." }, date: "12 May, 1:30 PM", amount: 1500, status: "Pending" },
+    { id: "#UC-4826", customer: { name: "Suresh Kumar" }, service: { title: "Deep Cleaning" }, provider: { name: "Pradeep K." }, date: "12 May, 11:30 AM", amount: 2400, status: "Completed" },
+    { id: "#UC-4825", customer: { name: "Ananya Gupta" }, service: { title: "Pest Control" }, provider: { name: "Mohan S." }, date: "12 May, 10:45 AM", amount: 1800, status: "Cancelled" },
   ]);
   const [showAdd, setShowAdd] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(orders[0]);
+  const [editOrder, setEditOrder] = useState(null);
+  const [toast, setToast] = useState("");
 
   const handleAddOrder = (order) => {
     setOrders([order, ...orders]);
     setSelectedOrder(order); // Show the newly added order in details
   };
 
+  const handleUpdateOrder = (updatedOrder) => {
+    setOrders(orders.map(o => o.id === updatedOrder.id ? updatedOrder : o));
+    setSelectedOrder(updatedOrder);
+    setToast("Order updated successfully!");
+    setTimeout(() => setToast(""), 2000);
+  };
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 px-8 max-w-screen-xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Order Management</h1>
+      {/* Toast Message */}
+      {toast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[9999] bg-green-600 text-white px-6 py-3 rounded shadow-lg animate-fade-in">
+          {toast}
+        </div>
+      )}
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         {stats.map((stat, idx) => (
@@ -83,6 +100,13 @@ export default function OrderDashboard() {
         selectedOrder={selectedOrder}
         setSelectedOrder={setSelectedOrder}
         statusColors={statusColors}
+        onEdit={order => setEditOrder(order)}
+        onDelete={order => {
+          setOrders(orders.filter(o => o.id !== order.id));
+          if (selectedOrder && selectedOrder.id === order.id) setSelectedOrder(null);
+          setToast("Order deleted successfully!");
+          setTimeout(() => setToast(""), 2000);
+        }}
       />
       {/* Pagination */}
       <div className="flex justify-between items-center mt-4">
@@ -99,6 +123,17 @@ export default function OrderDashboard() {
       </div>
       {/* Add Order Modal */}
       {showAdd && <AddOrderModal onClose={()=>setShowAdd(false)} onAdd={handleAddOrder} />}
+      {/* Edit Order Modal */}
+      {editOrder && (
+        <EditOrderModal
+          order={editOrder}
+          onClose={() => setEditOrder(null)}
+          onUpdate={order => {
+            handleUpdateOrder(order);
+            setEditOrder(null);
+          }}
+        />
+      )}
       {/* Dynamic Order Details below the table */}
       <div className="bg-white rounded-xl shadow p-8 mt-8">
         {selectedOrder ? (

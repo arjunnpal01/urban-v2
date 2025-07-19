@@ -66,7 +66,7 @@ export default function RecentOrders() {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-gray-800">New Services</h2>
         <button
-          onClick={() => router.push("/admin/services/add")}
+          onClick={() => router.push("/admin/services")}
           className="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 text-sm"
         >
           + Add New Service
@@ -114,7 +114,7 @@ export default function RecentOrders() {
               <td className="px-4 py-3">{service.description}</td>
               <td className="px-4 py-3 space-x-2">
                 <button
-                  onClick={() => router.push(`/admin/services/${service.title.toLowerCase().replace(/\s+/g, "-")}`)}
+                
                   className="bg-yellow-500 text-white px-2 py-1 text-xs rounded hover:bg-yellow-600"
                 >
                   Edit

@@ -11,7 +11,8 @@ const TABS = [
   "Trash",
 ];
 
-const filesData = [
+
+const initialFiles = [
   { type: "folder", name: "Corporate Policies", desc: "25 items • Updated 2 days ago", bg: "#f3f0ff" },
   { type: "file", ext: "pdf", icon: "📄", name: "UrbanCo Employee Handbook.pdf", desc: "3.2 MB • Updated 1 week ago", bg: "#e7f0fd" },
   { type: "file", ext: "docx", icon: "📄", name: "Service Provider Guidelines.docx", desc: "2.1 MB • Updated 3 days ago", bg: "#f6eafd" },
@@ -25,18 +26,53 @@ export default function FilesPage() {
   const [tab, setTab] = useState(1); // 1 = Company Files
   const [search, setSearch] = useState("");
   const [view, setView] = useState("grid");
+  const [files, setFiles] = useState(initialFiles);
+  const fileInputRef = React.useRef(null);
 
-  const filteredFiles = filesData.filter(f =>
+  // Handle file upload
+  const handleUploadClick = () => {
+    if (fileInputRef.current) fileInputRef.current.value = null;
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    const newFiles = selectedFiles.map(file => {
+      const ext = file.name.split('.').pop().toLowerCase();
+      let icon = "📄";
+      if (["jpg", "jpeg", "png", "gif", "bmp", "webp"].includes(ext)) icon = "🖼️";
+      const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+      return {
+        type: "file",
+        ext,
+        icon,
+        name: file.name,
+        desc: `${sizeMB} MB • Uploaded now`,
+        bg: "#e7f0fd",
+        fileObj: file,
+      };
+    });
+    setFiles(prev => [...newFiles, ...prev]);
+  };
+
+  const filteredFiles = files.filter(f =>
     f.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="p-6">
+      <input
+        type="file"
+        multiple
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Files Management</h1>
       </div>
       <FilesToolbar
-        onUpload={() => alert("Upload Files")}
+        onUpload={handleUploadClick}
         onShare={() => alert("Share")}
         search={search}
         setSearch={setSearch}

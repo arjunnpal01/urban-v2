@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function OrderTable({ orders, selectedOrder, setSelectedOrder, statusColors }) {
+export default function OrderTable({ orders, selectedOrder, setSelectedOrder, statusColors, onEdit, onDelete }) {
+  const [deleteId, setDeleteId] = useState(null);
+
   return (
     <div className="w-full overflow-x-auto">
       <div className="min-w-[900px] bg-white rounded-xl shadow">
@@ -40,7 +42,7 @@ export default function OrderTable({ orders, selectedOrder, setSelectedOrder, st
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <span className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">40×40</span>
-                    <span>{order.technician.name}</span>
+                    <span>{order.provider.name}</span>
                   </div>
                 </td>
                 <td className="px-4 py-3">{order.date}</td>
@@ -48,14 +50,30 @@ export default function OrderTable({ orders, selectedOrder, setSelectedOrder, st
                 <td className="px-4 py-3">
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[order.status]}`}>{order.status}</span>
                 </td>
-                <td className="px-4 py-3 flex gap-2">
+                <td className="px-4 py-5 flex gap-2">
                   <button
-                    className="text-blue-600 hover:underline"
-                    onClick={() => setSelectedOrder(order)}
+                    className="text-yellow-600 hover:underline"
+                    onClick={() => onEdit && onEdit(order)}
                   >
-                    View
+                    Edit
                   </button>
-                  <button className="text-green-600 hover:underline">Message</button>
+                  <button
+                    className="text-red-600 hover:underline"
+                    onClick={() => setDeleteId(order.id)}
+                  >
+                    Delete
+                  </button>
+                  {deleteId === order.id && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+                      <div className="bg-white rounded shadow p-6 w-full max-w-xs">
+                        <div className="font-semibold mb-4">Delete this order?</div>
+                        <div className="flex justify-end gap-2">
+                          <button className="px-3 py-1 rounded border" onClick={() => setDeleteId(null)}>Cancel</button>
+                          <button className="px-3 py-1 rounded bg-red-600 text-white" onClick={() => { onDelete && onDelete(order); setDeleteId(null); }}>Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </td>
               </tr>
             ))}

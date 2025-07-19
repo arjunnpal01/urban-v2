@@ -4,7 +4,7 @@ import OrderTimeline from "./OrderTimeline";
 
 export default function OrderDetails({ order, showActions = true }) {
   const [status, setStatus] = useState(order.status || "In Progress");
-  const [provider, setProvider] = useState(order.technician.name);
+  const [provider, setProvider] = useState(order.provider.name);
   const [reschedule, setReschedule] = useState("");
 
   if (!order) return null;
@@ -42,7 +42,7 @@ export default function OrderDetails({ order, showActions = true }) {
           <div className="flex items-center gap-4 mb-3">
             <span className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-lg">60×60</span>
             <div>
-              <div className="font-semibold text-lg text-yellow-700">{order.technician.name}</div>
+              <div className="font-semibold text-lg text-yellow-700">{order.provider.name}</div>
               <div className="text-xs text-gray-500">★ 4.2/5<br/>52 services completed</div>
             </div>
           </div>

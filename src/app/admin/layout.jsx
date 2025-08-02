@@ -31,7 +31,7 @@ export default function Layout({ children }) {
   }, []);
 
   return (
-    <main className="relative flex h-100vh overflow-auto left-0 " style={{ fontFamily: 'Barlow, sans-serif' }}>
+    <main className="relative flex overflow-auto left-0 " style={{ fontFamily: 'Barlow, sans-serif' }}>
       {/* Desktop Sidebar */}
       <div className="hidden md:block ">
         <Sidebar />
@@ -40,7 +40,7 @@ export default function Layout({ children }) {
 
       {/* Mobile Sidebar */}
       <div
-        className={`sticky top-0 h-full transition-transform duration-300 md:hidden ${
+        className={`sticky top-0  transition-transform duration-300 md:hidden ${
           isOpen ? "translate-x-0" : "-translate-x-[260px]"
         }`}
       >

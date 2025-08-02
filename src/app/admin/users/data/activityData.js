@@ -1,15 +1,32 @@
 export const activity = [
   {
-    name: "Ramesh Verma",
+    name: "Ramesh Patel",
     avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     desc: "Logged in",
-    time: "10:45 AM",
+    time: "2 min ago"
   },
   {
-    name: "Suman Singh",
-    avatar: "https://randomuser.me/api/portraits/men/33.jpg",
+    name: "Priya Sharma",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     desc: "Updated profile",
-    time: "9:30 AM",
+    time: "10 min ago"
   },
-  // ...add more activity as needed
+  {
+    name: "Amit Joshi",
+    avatar: "https://randomuser.me/api/portraits/men/65.jpg",
+    desc: "Changed password",
+    time: "1 hour ago"
+  },
+  {
+    name: "Suresh Kumar",
+    avatar: "https://randomuser.me/api/portraits/men/12.jpg",
+    desc: "Logged out",
+    time: "2 hours ago"
+  },
+  {
+    name: "Ananya Gupta",
+    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+    desc: "Signed up",
+    time: "1 day ago"
+  }
 ];

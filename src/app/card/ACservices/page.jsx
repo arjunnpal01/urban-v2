@@ -33,11 +33,13 @@ export default function ScrollingCard() {
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         {services.map((service, idx) => (
-          <div
+          <Link
             key={idx}
+            href={`/card/ACservices/${service.title.replace(/\s+/g, '-').toLowerCase()}`}
             className="flex-shrink-0 w-[160px] h-[200px] sm:w-[190px] sm:h-[230px] md:w-[220px] md:h-[260px] lg:w-[240px] lg:h-[280px] 
             bg-white border border-gray-100 rounded-2xl shadow-sm flex flex-col items-center 
             hover:border-gray-300 transition-all duration-300 overflow-hidden"
+            style={{ textDecoration: 'none' }}
           >
             <div className="w-full px-2 pt-3 pb-1 text-sm sm:text-base md:text-lg font-semibold text-gray-900 text-center truncate">
               {service.title}
@@ -53,7 +55,7 @@ export default function ScrollingCard() {
                 priority
               />
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

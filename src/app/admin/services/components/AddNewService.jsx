@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useApiMutation } from '@/shared/hooks/useApiMutation';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useAddService, useAddServiceMutation, useGetServices } from "../api/useAddService.hook";
 
 const serviceTabs = [
   "Plumbing",
@@ -12,11 +13,16 @@ const serviceTabs = [
 ];
 
 export default function AddNewService({ onAddService }) {
-  const router = useRouter();
+
+  const { data: service = serviceTabs } = useGetServices();
+  const { data: dummyData, isLoading: loadingDummy, error: dummyError, refetch: refetchServices } = useAddService();
+  const createService = useAddServiceMutation();
+
   const [form, setForm] = useState({
     image: "",
     name: "",
     category: "Home Services",
+    subcategoryId: "",
     price: "",
     status: "Active",
     duration: "",
@@ -35,55 +41,55 @@ export default function AddNewService({ onAddService }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSuccess("");
-    if (!form.name || !form.price || !form.duration || !form.rating || !form.description) {
+    // Validate required fields
+    if (!form.name || !form.price || !form.duration || !form.rating || !form.description || !form.subcategoryId) {
       setError("Please fill all required fields.");
       return;
     }
     setError("");
-    if (onAddService) {
-      onAddService(form.tab, {
-        image: form.image || "/default.jpg",
+    // Send all fields to backend
+    createService.mutate(
+      {
         name: form.name,
+        image: form.image,
         category: form.category,
-        price: Number(form.price),
+        subcategoryId: form.subcategoryId,
+        customPrice: Number(form.price),
         status: form.status,
         duration: form.duration,
-        rating: Number(form.rating),
+        rating: form.rating,
         description: form.description,
-      });
-    }
-    setForm({
-      image: "",
-      name: "",
-      category: "Home Services",
-      price: "",
-      status: "Active",
-      duration: "",
-      rating: "",
-      description: "",
-      tab: serviceTabs[0],
-    });
-    setSuccess("Service added successfully!");
-    setTimeout(() => {
-      router.back();
-    }, 1000);
+        tab: form.tab,
+        isActive: form.status === "Active",
+      },
+      {
+        onSuccess: async () => {
+          await refetchServices();
+          setSuccess("Service added successfully!");
+          setForm({
+            image: "",
+            name: "",
+            category: "Home Services",
+            subcategoryId: "",
+            price: "",
+            status: "Active",
+            duration: "",
+            rating: "",
+            description: "",
+            tab: serviceTabs[0],
+          });
+          if (onAddService) onAddService();
+        },
+        onError: () => setError("Failed to add service!"),
+      }
+    );
   };
 
   return (
     <div className="bg-white rounded-xl shadow p-8 max-w-2xl mx-auto overflow-y-auto relative" style={{ maxHeight: "80vh" }}>
-      {/* X Close Button */}
-      {/* <button
-        type="button"
-        onClick={() => router.back()}
-        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
-        aria-label="Close"
-      >
-        ×
-      </button> */}
-      <h2 className="text-lg font-semibold mb-4 text-center">Add New Service</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit}>
         {/* Service Name and Category */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 mb-4">
           <div className="flex-1">
             <label className="block mb-1 font-medium">Service Name *</label>
             <input
@@ -96,13 +102,15 @@ export default function AddNewService({ onAddService }) {
             />
           </div>
           <div className="flex-1">
-            <label className="block mb-1 font-medium">Category</label>
+            <label className="block mb-1 font-medium">Category *</label>
             <select
               name="category"
               value={form.category}
               onChange={handleChange}
               className="w-full border rounded px-3 py-2 bg-white"
+              required
             >
+              <option value="">Select category</option>
               <option value="Home Services">Home Services</option>
               <option value="Plumbing">Plumbing</option>
               <option value="AC Services">AC Services</option>
@@ -186,14 +194,14 @@ export default function AddNewService({ onAddService }) {
           </div>
         </div>
 
-          {/* Image Upload */}
+        {/* Image Upload */}
         <div>
           <label className="block mb-1 font-medium">Service Image</label>
           <div className="flex gap-4 items-center">
             {/* Left: Preview Box */}
             <div className="flex-shrink-0">
               <div className="border-2 border-dashed border-gray-300 rounded-lg h-32 w-32 flex items-center justify-center bg-gray-50">
-                {form.image ? (
+                {form.image && form.image.trim() !== "" ? (
                   <img src={form.image} alt="Preview" className="h-full w-full object-cover rounded-lg" />
                 ) : (
                   <span className="text-gray-400 text-center text-sm">Preview will<br/>appear here</span>
@@ -243,15 +251,13 @@ export default function AddNewService({ onAddService }) {
           />
         </div>
 
-      
-
         {error && <div className="text-red-500 text-sm">{error}</div>}
         {success && <div className="text-green-600 text-sm font-semibold mb-2 text-center">{success}</div>}
         <button
           type="submit"
           className="item-end bg-blue-600 text-white py-2 px-4 rounded font-semibold shadow hover:bg-blue-700"
         >
-          submit 
+          submit
         </button>
       </form>
     </div>

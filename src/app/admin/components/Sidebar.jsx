@@ -16,7 +16,8 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { signOut } from "firebase/auth";
-import { auth } from "@/lib/auth/firestore/firebase";
+// import { auth } from "@/lib/firebase";
+
 
 export default function Sidebar() {
   const router = useRouter();

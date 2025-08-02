@@ -1,6 +1,5 @@
 "use client";
 
-
 import HeroSection from "./components/Herosection";
 //  import Mostservice from "./card/page";
  import CleaningServices from "./card/Cleaner/page";
@@ -28,7 +27,6 @@ export default function Home() {
            {/* <Mservice /> */}
             <PlumberServices/>
             <ElectricianServices/>
-           
             <PainterServices />
             <ModularKitchen />
             <Carpenterservice />

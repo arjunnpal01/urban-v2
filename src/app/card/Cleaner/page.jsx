@@ -28,8 +28,7 @@ export default function CleaningServices() {
     },
   ];
 
-  const generateSlug = (title) =>
-    title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+  
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
@@ -48,33 +47,36 @@ export default function CleaningServices() {
 
       {/* Scrollable Cards */}
       <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-2">
-        {items.map((item, index) => (
-          <Link
-            key={index}
-            href={`/services/cleaning?scrollTo=${generateSlug(item.title)}`}
-            className="w-[220px] md:w-[230px] lg:w-[270px] flex-shrink-0"
-          >
-            <div className="border border-gray-200 rounded-xl overflow-hidden bg-white h-[320px] flex flex-col hover:shadow-md transition">
-              {/* Image */}
-              <div className="relative w-full h-48">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 270px"
-                  className="object-cover"
-                />
-              </div>
-
-              {/* Card Content */}
-              <CardContent className="p-4 pb-6 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-sm font-medium truncate">{item.title}</h3>
+        {items.map((item, index) => {
+          const slug = item.title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+          return (
+            <Link
+              key={index}
+              href={`/card/Cleaner/${slug}`}
+              className="w-[220px] md:w-[230px] lg:w-[270px] flex-shrink-0"
+            >
+              <div className="border border-gray-200 rounded-xl overflow-hidden bg-white h-[320px] flex flex-col hover:shadow-md transition">
+                {/* Image */}
+                <div className="relative w-full h-48">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 270px"
+                    className="object-cover"
+                  />
                 </div>
-              </CardContent>
-            </div>
-          </Link>
-        ))}
+
+                {/* Card Content */}
+                <CardContent className="p-4 pb-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-sm font-medium truncate">{item.title}</h3>
+                  </div>
+                </CardContent>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

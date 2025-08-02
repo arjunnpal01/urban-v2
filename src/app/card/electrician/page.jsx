@@ -55,35 +55,42 @@ export default function ElectricianServices() {
 
       {/* Scrollable Cards */}
       <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-2">
-        {items.map((item, index) => (
-          <div
-            key={index}
-            className="w-[220px] md:w-[230px] lg:w-[270px] flex-shrink-0 transform transition-transform duration-300 cursor-pointer hover:scale-105 hover:shadow-md"
-          >
-            <div className="border border-gray-200 rounded-xl overflow-hidden bg-white h-[340px] flex flex-col">
-              {/* Image */}
-              <div className="relative w-full h-52">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 270px"
-                  className="object-cover"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Card Content */}
-              <CardContent className="p-4 pb-6 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-sm font-medium truncate">{item.title}</h3>
-                  <p className="text-xs text-gray-500">{item.rating}</p>
+        {items.map((item, index) => {
+          const slug = item.title
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^a-z0-9-]/g, "");
+          return (
+            <Link
+              key={index}
+              href={`/card/electrician/${slug}`}
+              className="w-[220px] md:w-[230px] lg:w-[270px] flex-shrink-0"
+            >
+              <div className="border border-gray-200 rounded-xl overflow-hidden bg-white h-[340px] flex flex-col hover:scale-105 hover:shadow-md transition-transform duration-300 cursor-pointer">
+                {/* Image */}
+                <div className="relative w-full h-52">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 270px"
+                    className="object-cover"
+                    loading="lazy"
+                  />
                 </div>
-                <p className="text-sm font-semibold">{item.price}</p>
-              </CardContent>
-            </div>
-          </div>
-        ))}
+
+                {/* Card Content */}
+                <CardContent className="p-4 pb-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-sm font-medium truncate">{item.title}</h3>
+                    <p className="text-xs text-gray-500">{item.rating}</p>
+                  </div>
+                  <p className="text-sm font-semibold">{item.price}</p>
+                </CardContent>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

@@ -1,10 +1,26 @@
 "use client";
 
+
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Carpenterservice() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    return () => {
+      if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "auto";
+      }
+    };
+  }, [router]);
+
   const items = [
     {
       title: "Wardrobe Design Consultation",
@@ -41,8 +57,8 @@ export default function Carpenterservice() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold">Carpenter Services</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-semibold whitespace-nowrap">Carpenter Services</h2>
         <Link
           href="/services?type=carpenter"
           className="text-sm px-4 py-3 rounded text-blue-600 border border-gray-200 hover:underline"
@@ -52,29 +68,37 @@ export default function Carpenterservice() {
       </div>
 
       {/* Scrollable Card Section */}
-      <div className="flex items-start gap-4 overflow-x-auto pb-2 scrollbar-hide scroll-smooth">
-        {items.map((item, index) => (
-          <Card
-            key={index}
-            className="overflow-hidden rounded-xl shadow-sm min-w-[220px] md:min-w-[230px] lg:min-w-[270px] flex-shrink-0 transition-transform hover:scale-105"
-          >
-            <div className="relative w-full h-52">
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 270px"
-                className="object-cover"
-                loading="lazy"
-              />
-            </div>
-            <CardContent className="p-4 space-y-1 flex flex-col justify-between h-[120px]">
-              <h3 className="text-sm font-medium truncate">{item.title}</h3>
-              <p className="text-xs text-gray-500">{item.rating}</p>
-              <p className="text-sm font-semibold">{item.price}</p>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-2">
+        {items.map((item, index) => {
+          const slug = item.title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+          return (
+            <Link
+              key={index}
+              href={`/card/carpenter/${slug}`}
+              className="w-[220px] md:w-[230px] lg:w-[270px] flex-shrink-0"
+            >
+              <div className="border border-gray-200 rounded-xl overflow-hidden bg-white h-[320px] flex flex-col hover:shadow-md transition">
+                {/* Image */}
+                <div className="relative w-full h-48">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 270px"
+                    className="object-cover"
+                  />
+                </div>
+
+                {/* Card Content */}
+                <CardContent className="p-4 pb-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-sm font-medium truncate">{item.title}</h3>
+                  </div>
+                </CardContent>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

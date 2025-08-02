@@ -1,35 +1,18 @@
 export const stats = [
-  {
-    label: "Total Users",
-    value: 1200,
-    icon: "👤",
-    badge: <span className="ml-2 px-2 py-1 bg-green-100 text-green-700 rounded text-xs">+5%</span>,
-  },
-  {
-    label: "Active Users",
-    value: 980,
-    icon: "✅",
-    badge: <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">+2%</span>,
-  },
-  {
-    label: "Pending Users",
-    value: 120,
-    icon: "⏳",
-    badge: <span className="ml-2 px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">-1%</span>,
-  },
-  {
-    label: "Inactive Users",
-    value: 100,
-    icon: "❌",
-    badge: <span className="ml-2 px-2 py-1 bg-red-100 text-red-700 rounded text-xs">-3%</span>,
-  },
+  { label: "Total Users", value: 1200 },
+  { label: "Active", value: 1100 },
+  { label: "Inactive", value: 100 },
 ];
 
-// usersData is now provided by the API (MSW in development)
-export const usersData = [];
+export const usersData = [
+  { id: 1, name: "Ramesh Patel", email: "ramesh@example.com", status: "Active" },
+  { id: 2, name: "Priya Sharma", email: "priya@example.com", status: "Inactive" },
+  { id: 3, name: "Amit Joshi", email: "amit@example.com", status: "Active" },
+  { id: 4, name: "Suresh Kumar", email: "suresh@example.com", status: "Active" },
+  { id: 5, name: "Ananya Gupta", email: "ananya@example.com", status: "Inactive" },
+];
 
 export const statusColors = {
   Active: "bg-green-100 text-green-700",
-  Pending: "bg-yellow-100 text-yellow-700",
   Inactive: "bg-red-100 text-red-700",
 };

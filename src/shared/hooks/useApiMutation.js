@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiWrapper } from '@/shared/api/apiWrapper';
+import { apiWrapper } from '../api/apiWrapper';
 
 /**
  * Generic API mutation hook for POST/PATCH/DELETE requests using React Query and apiWrapper

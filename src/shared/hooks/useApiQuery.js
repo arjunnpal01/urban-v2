@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { apiWrapper } from '@/shared/api/apiWrapper';
+import { apiWrapper } from '../api/apiWrapper';
 
 /**
  * Generic API hook for GET/POST/PATCH/DELETE requests using React Query and apiWrapper

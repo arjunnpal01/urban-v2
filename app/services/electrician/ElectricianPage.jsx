@@ -3,6 +3,9 @@
 
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
+import { useRouter } from 'next/navigation';
+import ServiceModal from "../details/ServiceModal";
+import ServiceDetail from "../details/ServiceDetail";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, decrementQuantity } from "../../../src/store/cartSlice";
 import toast, { Toaster } from "react-hot-toast";
@@ -74,6 +77,9 @@ export default function ElectricianPage() {
   const allServices = useMemo(() => groupByCategory(electricianServices), []);
   const cartItems = useSelector((state) => state.cart.items);
   const [quantities, setQuantities] = useState({});
+  const router = useRouter();
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -147,7 +153,7 @@ export default function ElectricianPage() {
         </div>
 
         <div className="mt-1">
-          <button className="text-purple-600 text-[12px] sm:text-sm hover:underline">
+          <button onClick={() => { setSelectedService(service); setIsModalOpen(true); document.body.style.overflow = 'hidden'; }} className="text-purple-600 text-[12px] sm:text-sm hover:underline">
             View details
           </button>
         </div>
@@ -225,6 +231,17 @@ export default function ElectricianPage() {
             View Cart
           </button>
         </div>
+      )}
+
+      {isModalOpen && selectedService && (
+        <ServiceModal
+          service={selectedService}
+          groupedServices={allServices}
+          onClose={() => { setIsModalOpen(false); setSelectedService(null); document.body.style.overflow = ''; }}
+          onAdd={(s) => { dispatch(addToCart({ ...s, quantity: 1 })); toast.success('Item added to cart'); }}
+          onDone={(s) => { dispatch(addToCart({ ...s, quantity: 1 })); router.push('/cart'); }}
+          DetailComponent={ServiceDetail}
+        />
       )}
     </div>
   );

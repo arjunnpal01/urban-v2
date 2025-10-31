@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
+import { useRouter } from 'next/navigation';
+import ServiceModal from "../details/ServiceModal";
+import ServiceDetail from "../details/ServiceDetail";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, decrementQuantity } from "../../../src/store/cartSlice";
 import toast, { Toaster } from "react-hot-toast";
@@ -52,6 +55,9 @@ const groupByCategory = (services) =>
 export default function PlumberPage() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
+  const router = useRouter();
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const [quantities, setQuantities] = useState({});
   const grouped = useMemo(() => groupByCategory(plumberServices), []);
@@ -111,7 +117,7 @@ export default function PlumberPage() {
 
       {/* View Details */}
       <div className="mt-1">
-        <button className="text-purple-600 text-[12px] sm:text-sm hover:underline">
+        <button onClick={() => { setSelectedService(service); setIsModalOpen(true); document.body.style.overflow = 'hidden'; }} className="text-purple-600 text-[12px] sm:text-sm hover:underline">
           View details
         </button>
       </div>
@@ -190,6 +196,17 @@ export default function PlumberPage() {
           </div>
           <button className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 text-sm">View Cart</button>
         </div>
+      )}
+
+      {isModalOpen && selectedService && (
+        <ServiceModal
+          service={selectedService}
+          groupedServices={grouped}
+          onClose={() => { setIsModalOpen(false); setSelectedService(null); document.body.style.overflow = ''; }}
+          onAdd={(s) => { dispatch(addToCart({ ...s, quantity: 1 })); toast.success('Item added to cart'); }}
+          onDone={(s) => { dispatch(addToCart({ ...s, quantity: 1 })); router.push('/cart'); }}
+          DetailComponent={ServiceDetail}
+        />
       )}
     </div>
   );

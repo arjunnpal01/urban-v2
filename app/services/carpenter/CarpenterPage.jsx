@@ -3,6 +3,9 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, decrementQuantity } from '../../../src/store/cartSlice';
 import { useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import ServiceModal from "../details/ServiceModal";
+import ServiceDetail from "../details/ServiceDetail";
 import toast, { Toaster } from 'react-hot-toast';
 import Image from 'next/image';
 import CarpenterSidebar from '../sidebar/CarpenterSidebar';
@@ -54,6 +57,9 @@ export default function CarpenterPage() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items || []);
   const [quantities, setQuantities] = useState({});
+  const router = useRouter();
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const groupedServices = useMemo(() => groupByCategory(carpenterServices), []);
 
   const sectionRefs = Object.keys(groupedServices).reduce((acc, key) => {
@@ -120,7 +126,7 @@ export default function CarpenterPage() {
 
         {/* View Details */}
         <div className="mt-1">
-          <button className="text-purple-600 text-[12px] sm:text-sm hover:underline">
+          <button onClick={() => { setSelectedService(service); setIsModalOpen(true); document.body.style.overflow = 'hidden'; }} className="text-purple-600 text-[12px] sm:text-sm hover:underline">
             View details
           </button>
         </div>
@@ -200,6 +206,16 @@ export default function CarpenterPage() {
             View Cart
           </button>
         </div>
+      )}
+      {isModalOpen && selectedService && (
+        <ServiceModal
+          service={selectedService}
+          groupedServices={groupedServices}
+          onClose={() => { setIsModalOpen(false); setSelectedService(null); document.body.style.overflow = ''; }}
+          onAdd={(s) => { dispatch(addToCart({ ...s, quantity: 1 })); toast.success('Item added to cart'); }}
+          onDone={(s) => { dispatch(addToCart({ ...s, quantity: 1 })); router.push('/cart'); }}
+          DetailComponent={ServiceDetail}
+        />
       )}
     </div>
   );

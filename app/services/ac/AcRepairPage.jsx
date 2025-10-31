@@ -3,9 +3,12 @@
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, decrementQuantity } from "../../../src/store/cartSlice";
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import Sidebar from "../sidebar/ACSidebar";
 import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import ServiceModal from "../details/ServiceModal";
+import ServiceDetail from "../details/ServiceDetail";
 
 const services = [
   {
@@ -238,6 +241,9 @@ export default function AcRepairPage() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items || []);
   const [quantities, setQuantities] = useState({});
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const groupedServices = useMemo(() => {
     return services.reduce((acc, service) => {
@@ -269,6 +275,47 @@ export default function AcRepairPage() {
       block: "start",
     });
   };
+
+  const openModal = (service) => {
+    // provide defaults if fields missing
+    const svc = {
+      ...service,
+      process: service.process || [
+        "Inspection of the area",
+        "Diagnosis and quotation",
+        "Service execution by expert",
+        "Final check and handover",
+      ],
+      faqs: service.faqs || [
+        { question: "How long will the service take?", answer: `${service.duration || 'Varies depending on issue'}` },
+        { question: "Do I need to be present?", answer: "Yes, or someone authorized should be available." },
+      ],
+      ratings: service.ratings || 4.7,
+      reviews: service.reviews || [
+        { user: "Amit K.", rating: 5, comment: "Quick and professional." },
+        { user: "Sneha R.", rating: 4, comment: "Good value for money." },
+      ],
+    };
+
+    setSelectedService(svc);
+    setIsModalOpen(true);
+    // prevent background scroll
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+    document.body.style.overflow = '';
+  };
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') closeModal();
+    };
+    if (isModalOpen) window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isModalOpen]);
 
   const handleAdd = (service) => {
     dispatch(addToCart({ ...service, quantity: 1 }));
@@ -341,7 +388,7 @@ export default function AcRepairPage() {
                       </div>
 
                       <div className="mt-1">
-                        <button className="text-purple-600 text-[12px] sm:text-sm hover:underline">
+                        <button onClick={() => openModal(service)} className="text-purple-600 text-[12px] sm:text-sm hover:underline">
                           View details
                         </button>
                       </div>
@@ -407,6 +454,17 @@ export default function AcRepairPage() {
             View Cart
           </button>
         </div>
+      )}
+
+      {isModalOpen && selectedService && (
+        <ServiceModal
+          service={selectedService}
+          groupedServices={groupedServices}
+          onClose={closeModal}
+          onAdd={(s) => { dispatch(addToCart({ ...s, quantity: 1 })); toast.success('Added to cart'); }}
+          onDone={(s) => { dispatch(addToCart({ ...s, quantity: 1 })); router.push('/cart'); }}
+          DetailComponent={ServiceDetail}
+        />
       )}
     </div>
   );
